@@ -17,7 +17,7 @@ def get_sample_info(path, patient, normal, out_file, sex):
         for file in files:
             try:
                 parts = file.split('_')
-                if len(parts) <= 3:
+                if len(parts) < 3:
                     continue  # Skip files that don't match the expected pattern
 
                 sample = parts[0].replace(patient, '')
