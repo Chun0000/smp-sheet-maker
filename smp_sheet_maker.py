@@ -14,10 +14,13 @@ def get_sample_info(path, patient, normal, out_file, sex):
 
     data = {}
     for root, _, files in os.walk(path):
+        unmatched_files = 0
+        matched_files = 0
         for file in files:
             try:
                 parts = file.split('_')
                 if len(parts) < 3:
+                    unmatched_files += 1
                     continue  # Skip files that don't match the expected pattern
 
                 sample = parts[0].replace(patient, '')
@@ -32,6 +35,7 @@ def get_sample_info(path, patient, normal, out_file, sex):
                     data[sample]['fastq_1'] = file_path
                 elif 'R2' in file:
                     data[sample]['fastq_2'] = file_path
+                matched_files += 1
             except IndexError:
                 logging.warning(
                     f"Skipping file with unexpected format: {file}")
@@ -42,6 +46,8 @@ def get_sample_info(path, patient, normal, out_file, sex):
     df['sex'] = sex
     df = df[['patient', 'sex', 'status', 'sample', 'lane', 'fastq_1', 'fastq_2']]
     df.to_csv(out_file, index=False)
+    logging.info(f"Matched files: {matched_files}")
+    logging.info(f"Unmatched files: {unmatched_files}")
 
 
 if __name__ == "__main__":
