@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import logging
 import argparse
 
 
@@ -9,7 +8,7 @@ def get_sample_info(path, patient, normal, out_file, sex):
     Function to get sample information and save to a CSV file.
     """
     if not os.path.exists(path):
-        logging.error(f"Directory does not exist: {path}")
+        print(f"Directory does not exist: {path}")
         return
 
     data = {}
@@ -37,7 +36,7 @@ def get_sample_info(path, patient, normal, out_file, sex):
                     data[sample]['fastq_2'] = file_path
                 matched_files += 1
             except IndexError:
-                logging.warning(
+                print(
                     f"Skipping file with unexpected format: {file}")
 
     df = pd.DataFrame.from_dict(data, orient='index').reset_index().rename(
@@ -46,8 +45,8 @@ def get_sample_info(path, patient, normal, out_file, sex):
     df['sex'] = sex
     df = df[['patient', 'sex', 'status', 'sample', 'lane', 'fastq_1', 'fastq_2']]
     df.to_csv(out_file, index=False)
-    logging.info(f"Matched files: {matched_files}")
-    logging.info(f"Unmatched files: {unmatched_files}")
+    print(f"Matched files: {matched_files}")
+    print(f"Unmatched files: {unmatched_files}")
 
 
 if __name__ == "__main__":
