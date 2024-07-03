@@ -6,4 +6,4 @@ normal=N1
 sex=XX
 output=/staging/biology/u3414958/OM3_WGS/sample_sheet.csv
 
-python ./smp_sheet_maker.py $data_path $patient $normal $output
+python ./smp_sheet_maker.py $data_path $patient $normal $output $sex
