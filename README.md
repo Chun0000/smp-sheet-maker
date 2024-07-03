@@ -16,7 +16,13 @@ This script create sample sheet for sarek pipeline.
 - `output`: output sample sheet
 - `sex`: sex of the patient
 
-3. Run in termnal
+3. Go to the directory of this project
+
+```
+cd /path/to/smp-sheet-maker
+```
+
+4. Run in termnal
 
 ```
 sh smp_sheet_maker.sh
