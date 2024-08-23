@@ -3,7 +3,7 @@ import pandas as pd
 import argparse
 
 
-def get_sample_info(path, patient, normal, out_file, sex):
+def get_sample_info(path, patient, normal, out_file, sex, lane):
     """
     Function to get sample information and save to a CSV file.
     """
@@ -23,12 +23,11 @@ def get_sample_info(path, patient, normal, out_file, sex):
                     continue  # Skip files that don't match the expected pattern
 
                 sample = parts[0].replace(patient, '')
-                lane = parts[2]
                 file_path = os.path.join(root, file)
 
                 if sample not in data:
                     data[sample] = {'status': 0 if sample == normal else 1,
-                                    'lane': lane, 'fastq_1': '', 'fastq_2': ''}
+                                    'fastq_1': '', 'fastq_2': ''}
 
                 if 'R1' in file:
                     data[sample]['fastq_1'] = file_path
@@ -43,6 +42,7 @@ def get_sample_info(path, patient, normal, out_file, sex):
         columns={'index': 'sample'})
     df['patient'] = patient
     df['sex'] = sex
+    df['lane'] = lane
     df = df[['patient', 'sex', 'status', 'sample', 'lane', 'fastq_1', 'fastq_2']]
     df.to_csv(out_file, index=False)
     print(f"Matched files: {matched_files}")
@@ -57,8 +57,9 @@ if __name__ == "__main__":
     parser.add_argument("normal", help="Normal sample identifier.")
     parser.add_argument("out_file", help="Output CSV file path.")
     parser.add_argument("sex", help="Sex of the patient.")
+    parser.add_argument("lane", help="Lane of the run")
 
     args = parser.parse_args()
 
     get_sample_info(args.path, args.patient,
-                    args.normal, args.out_file, args.sex)
+                    args.normal, args.out_file, args.sex, args.lane)
